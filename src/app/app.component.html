@@ -1,3 +1,22 @@
-<h1>
-  {{title}}
-</h1>
+<md-toolbar color="primary">
+  <span>Log Manager</span>
+  <span style="flex: 1 1 auto;"></span>
+  <span><button md-raised-button color="warn">Выхода нет</button></span>
+</md-toolbar>
+
+<md-card>
+  <md-input-container>
+    <input mdInput placeholder="Пароль" type="password">
+  </md-input-container>
+  <button (click)="showCon=!showCon" md-raised-button>Расшифровать заголовки</button>
+</md-card>
+
+<div *ngIf="showCon;else empty" class="app-content">
+  <md-card>
+    <md-checkbox>Kek</md-checkbox><p></p>
+    <button md-raised-button>Toggle</button>
+  </md-card>
+</div>
+
+<ng-template #empty>
+</ng-template>
