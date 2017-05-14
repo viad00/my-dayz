@@ -6,5 +6,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  //title = 'app works!';
+  showCon = false;
+  pass: string;
+  Exit(): void {
+    this.showCon = false;
+  }
+  Decrypt(): void {
+    this.showCon = true;
+  }
 }
