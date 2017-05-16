@@ -1,12 +1,24 @@
 <md-toolbar color="primary">
   <span>Log Manager</span>
   <span style="flex: 1 1 auto;"></span>
-  <span><button (click)="Exit();" md-raised-button color="warn">Выхода нет</button></span>
+  <span>
+    <button md-raised-button color="primary" (click)="AddNew();">Новый</button>
+    <button (click)="Exit();" md-raised-button color="warn">Выхода нет</button>
+  </span>
 </md-toolbar>
+
+<md-card *ngIf="showCon && showDialog">
+  <md-input-container style="width: 100%" floatPlaceholder="auto|always|never">
+      <textarea mdInput mdTextareaAutosize name="textarea" [(ngModel)]="textarea" required
+                placeholder="Текст заметки"></textarea>
+  </md-input-container>
+  <button (click)="AcceptNew();" md-raised-button color="primary">Добавить</button>
+  <button (click)="HideNew();" md-raised-button color="warn">Убрать</button>
+</md-card>
 
 <md-card *ngIf="!showCon">
   <md-input-container>
-    <input (change)="pass=$event.target.value" mdInput placeholder="Пароль" type="password" id="password">
+    <input name="pass" [(ngModel)]="pass" mdInput placeholder="Пароль" type="password" id="password">
   </md-input-container>
   <button (click)="Decrypt();" md-raised-button>Расшифровать заголовки</button>
 </md-card>
