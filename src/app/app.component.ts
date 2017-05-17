@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
-import { PrivateKey, PublicKey } from 'bitcore-lib';
+import * as crypto from 'crypto';
+import * as ecies from 'standard-ecies';
 
 export class NewMessage {
   public Content: string;
@@ -13,6 +14,19 @@ export class NewMessage {
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  cryptopt = {
+    hashName: 'sha256',
+    hashLength: '32',
+    macName: 'sha256',
+    macLength: '32',
+    curveName: 'secp256k1',
+    symmetricChyperName: 'aes-256-cbc',
+    iv: 6,
+    keyFormat: 'uncompressed',
+    s1: null,
+    s2: null
+  };
+  ecdh = crypto.createECDH(this.cryptopt.curveName);
   showCon = false;
   showDialog = false;
   address = 'http://127.0.0.1:8000/api/';
@@ -36,10 +50,9 @@ export class AppComponent {
     this.textarea = null;
   }
   GenerateKeyPair(): void {
-    const keypair = new PrivateKey();
-    const pubpair = new PublicKey(keypair, true);
-    console.log(keypair.toString());
-    console.log(pubpair.toString());
+    this.ecdh.generateKeys();
+    console.log(this.ecdh.getPrivateKey());
+    console.log(this.ecdh.getPublicKey());
   }
   AcceptNew(): void {
     console.log(this.textarea);
