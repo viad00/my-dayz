@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import { Http, Headers, Response } from '@angular/http';
-import * as crypto from 'crypto';
-import * as ecies from 'standard-ecies';
+import { Http, Headers } from '@angular/http';
+import * as crypto from 'webcrypto';
 
 export class NewMessage {
   public Content: string;
-  public Sign: string;
+  public Hash: string;
 }
 
 @Component({
@@ -14,19 +13,20 @@ export class NewMessage {
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  cryptopt = {
-    hashName: 'sha256',
-    hashLength: '32',
-    macName: 'sha256',
-    macLength: '32',
-    curveName: 'secp256k1',
-    symmetricChyperName: 'aes-256-cbc',
-    iv: 6,
-    keyFormat: 'uncompressed',
-    s1: null,
-    s2: null
-  };
-  ecdh = crypto.createECDH(this.cryptopt.curveName);
+  pubkey = '-----BEGIN PUBLIC KEY-----\n' +
+  'AAAAB3NzaC1yc2EAAAABJQAAAgEAoGk22+PjQH4TEwT0v8qnYxm0YKcil4GB2j03\n' +
+  'Ck5RamWid+TZGFH4aW0ekYe1aBB3Qt7FCs49zR3jxPpeQsv4AjehCB6AVU3R1rfL\n' +
+  '2ze+qiERUVFLcrYr1pzbABn/5YWwkPQFZlgPx82bOMCavDWCY9Z7xLmxeqcdP6P0\n' +
+  '7pbOe3UnIOSxPZblXvSHiYueAzL1o2bqaT2aJtF2yxuPQq/XDkBjAQ/kcOpVYr5Y\n' +
+  'm9/5WwI8bBiipY+xLlXSa78TvVdoTZHdf7EIXZD0rGxmhxOT7KjO1QXycpprX7Yz\n' +
+  'eOQVgc8W+B9fCkAaVaznNNo+wfVUUc5qp5urAz/OcF9X0AfjKjI9pXh6eqeipNA1\n' +
+  'hBYeGrsxSOuTcd48t2OCQzt9213oj7PZEUImAnkXP3sYKykn2w2HseEzG9q/WszV\n' +
+  '3mENtPkApY7EapMfNV8wN0H7q8zZSv4AwkG3jhWKYgRfHURNMkx9jdnF2H+LbuH+\n' +
+  'uyAh+SXDNuu8iEmMNrZBaUAVPJlqxX1O7i0t0XYiC509jdQvFIGI2FGVPXtudk5c\n' +
+  'IXX0miZ8ZXUJHBKu/j/piWzejJTGHfdgBcA9gdnskZjgoNyBkU2adURMgkKwXA+n\n' +
+  'Nb6WC+oxojn8RJGz127gwGGVgChX7h+uF2SL8m4C1AgBkV63CU9BNtRiAzZcCJhL\n' +
+  'V+g5roU=\n' +
+  '-----END PUBLIC KEY-----';
   showCon = false;
   showDialog = false;
   address = 'http://127.0.0.1:8000/api/';
@@ -50,17 +50,19 @@ export class AppComponent {
     this.textarea = null;
   }
   GenerateKeyPair(): void {
-    this.ecdh.generateKeys();
-    console.log(this.ecdh.getPrivateKey());
-    console.log(this.ecdh.getPublicKey());
   }
   AcceptNew(): void {
     console.log(this.textarea);
+    console.log(this.pubkey);
+    const encrypted_text = crypto.publicEncrypt(this.pubkey, this.textarea);
     const obj = new NewMessage;
-    obj.Content = this.textarea;
-    obj.Sign = '';
+    obj.Content = encrypted_text;
+    obj.Hash = '';
     const body = JSON.stringify(obj);
-    const headers = new Headers({ 'Content-Type': 'application/json;charset=utf-8' });
-    this.http.post((this.address + 'new'), body, { headers: headers });
+    console.log(body);
+    const dejson = JSON.parse(body);
+    console.log(dejson);
+    // const headers = new Headers({ 'Content-Type': 'application/json;charset=utf-8' });
+    // this.http.post((this.address + 'new'), body, { headers: headers });
   }
 }
