@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Http, Headers } from '@angular/http';
+import { AES, SHA256 } from 'cryptojs';
 
 export class NewMessage {
   public Content: string;
@@ -35,15 +36,7 @@ export class AppComponent {
   }
   AcceptNew(): void {
     console.log(this.textarea);
-    crypto.subtle.generateKey(
-      {
-        name: 'AES-GCM',
-        length: 256, // can be  128, 192, or 256
-      },
-      true, // whether the key is extractable (i.e. can be used in exportKey)
-      ['encrypt', 'decrypt'] // can "encrypt", "decrypt", "wrapKey", or "unwrapKey"
-    ).then(function(key) { });
-    const encrypted_text = this.textarea;
+    const encrypted_text = AES(this.textarea, this.pass);
     const obj = new NewMessage;
     obj.Content = encrypted_text;
     const body = JSON.stringify(obj);
