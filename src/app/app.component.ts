@@ -3,7 +3,7 @@ import { Http, Headers } from '@angular/http';
 
 export class NewMessage {
   public Content: string;
-  public Hash: string;
+  public Sign: string;
 }
 
 @Component({
@@ -35,10 +35,17 @@ export class AppComponent {
   }
   AcceptNew(): void {
     console.log(this.textarea);
+    crypto.subtle.generateKey(
+      {
+        name: 'AES-GCM',
+        length: 256, // can be  128, 192, or 256
+      },
+      true, // whether the key is extractable (i.e. can be used in exportKey)
+      ['encrypt', 'decrypt'] // can "encrypt", "decrypt", "wrapKey", or "unwrapKey"
+    ).then(function(key) { });
     const encrypted_text = this.textarea;
     const obj = new NewMessage;
     obj.Content = encrypted_text;
-    obj.Hash = '';
     const body = JSON.stringify(obj);
     console.log(body);
     // const headers = new Headers({ 'Content-Type': 'application/json;charset=utf-8' });
