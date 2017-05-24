@@ -6,7 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MdButtonModule, MdCheckboxModule, MdToolbarModule, MdSidenavModule, MdCardModule} from '@angular/material';
 
 import { AppComponent } from './app.component';
-import { MdInputModule } from "@angular/material";
+import { MdInputModule } from '@angular/material';
 
 @NgModule({
   declarations: [

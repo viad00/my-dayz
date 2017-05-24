@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Http, Headers } from '@angular/http';
-import { AES, SHA256 } from 'cryptojs';
+import * as CryptoJS from 'crypto-js';
 
 export class NewMessage {
   public Content: string;
@@ -32,15 +32,14 @@ export class AppComponent {
     this.showDialog = false;
     this.textarea = null;
   }
-  GenerateKeyPair(): void {
-  }
   AcceptNew(): void {
     console.log(this.textarea);
-    const encrypted_text = AES(this.textarea, this.pass);
+    const encrypted_text = CryptoJS.AES.encrypt(this.textarea, this.pass);
     const obj = new NewMessage;
-    obj.Content = encrypted_text;
+    obj.Content = encrypted_text.toString();
     const body = JSON.stringify(obj);
     console.log(body);
+    console.log(CryptoJS.AES.decrypt(obj.Content, this.pass).toString(CryptoJS.enc.Utf8));
     // const headers = new Headers({ 'Content-Type': 'application/json;charset=utf-8' });
     // this.http.post((this.address + 'new'), body, { headers: headers });
   }
